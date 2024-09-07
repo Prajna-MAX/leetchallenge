@@ -1,0 +1,30 @@
+class Solution {
+    public static ArrayList<Integer> increasingNumbers(int n) {
+        ArrayList<Integer> res=new ArrayList<>();
+        List<Integer>v=new ArrayList<>();
+        if(n==1){
+            for(int i=0;i<=9;i++){
+                res.add(i);
+            }
+        }
+        else{
+        solve(res,v,n,1);
+        }
+        return res;
+        
+    }
+    private static void solve(ArrayList<Integer> res,List<Integer> v,int n,int start){
+        if(n==0){
+            int ans=0;
+            for(int i=0;i<v.size();i++){
+                ans=ans*10+v.get(i);
+            }
+            res.add(ans);
+        }
+        for(int i=start;i<=9;i++){
+                v.add(i);
+                solve(res,v,n-1,i+1);
+                v.remove(v.size()-1);
+        }
+    }
+}
