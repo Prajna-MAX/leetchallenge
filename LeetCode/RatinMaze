@@ -1,0 +1,52 @@
+struct Choice {
+    char name;
+    int dx, dy;
+};
+
+bool isSolved(int x, int y, int n) {
+    return x == n - 1 && y == n - 1;
+}
+
+bool isValid(int x, int y, int n, vector<vector<int>>& arr) {
+    return x >= 0 && x < n && y >= 0 && y < n && arr[x][y] == 1;
+}
+
+void solve(int x, int y, int n, vector<string>& res, string path, vector<vector<int>>& arr, vector<Choice>& choices) {
+    if (isSolved(x, y, n)) {
+        res.push_back(path);
+        return;
+    }
+    for (Choice choice : choices) {
+        int nx = x + choice.dx;
+        int ny = y + choice.dy;
+        if (isValid(nx, ny, n, arr)) {
+            arr[x][y] = 0; // Mark as visited
+            path.push_back(choice.name);
+            solve(nx, ny, n, res, path, arr, choices);
+            arr[x][y] = 1; // Unmark as visited
+            path.pop_back();
+        }
+    }
+}
+
+class Solution {
+public:
+    vector<string> findPath(vector<vector<int>>& mat) {
+        int n = mat.size();
+        vector<string> res;
+        string path = "";
+
+        vector<Choice> choices = {
+            {'D', 1, 0},  // Move Down
+            {'L', 0, -1}, // Move Left
+            {'R', 0, 1},  // Move Right
+            {'U', -1, 0}  // Move Up
+        };
+
+        if (mat[0][0] == 1) {
+            solve(0, 0, n, res, path, mat, choices);
+        }
+
+        return res;
+    }
+};
